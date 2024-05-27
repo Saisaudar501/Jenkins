@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('cloning source code') {
+            steps {
+                git 'https://github.com/Saisaudar501/Terraform_project.git'
+            }
+        }
+        stage('Installing pluggins') {
+            steps {
+                dir('Terraform_Import'){
+                    sh 'terraform init'
+                }
+                
+            }
+        }
+        stage('Checking the Plan') {
+            steps {
+                dir('Terraform_Import'){
+                sh 'terraform plan'
+                }
+            }
+        }
+        stage('Create EC2') {
+            steps {
+                dir('Terraform_Import'){
+                sh 'terraform ${action} -auto-approve'
+                }
+            }
+        }
+    }
+}
