@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('clone') {
+            steps {
+               git branch: 'main', url: 'https://github.com/CloudTechDevOps/project-1-maven-jenkins-CICD-docker-eks-.git'
+            }
+        }
+        stage('validate') {
+            steps {
+               
+                  sh 'mvn validate' 
+               
+            }
+        }
+        stage('compile') {
+            steps {
+               
+                   sh 'mvn compile' 
+               
+            }
+        }
+        stage('clean') {
+            steps {
+              
+                   sh 'mvn clean'
+               
+            }
+        }
+        stage('test') {
+            steps {
+              
+                   sh 'mvn test' 
+               
+            }
+        }
+        stage('package') {
+            steps {
+               
+                   sh 'mvn package' 
+                
+            }
+        }
+        stage('install') {
+            steps {
+               
+                   sh 'mvn install' 
+               
+            }
+        }
+        stage('deployment') {
+            steps {
+               deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://3.101.13.115:8081/')], contextPath: null, war: '**/*.war'
+               }
+            }
+        
+    }
+}
